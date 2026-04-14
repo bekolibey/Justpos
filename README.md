@@ -1,6 +1,7 @@
-# Restoran POS Prototipi
+# JustPOS - Restoran POS Prototipi
 
-Restoran/kafe operasyonu için geliştirilmiş, VakıfBank kurumsal hissine sahip adisyon + POS yönlendirme frontend prototipi.
+Restoran/kafe operasyonu için geliştirilmiş, kurumsal görünümlü adisyon + ödeme + mobil POS akışı prototipi.
+Uygulama hem masaüstü merchant paneli hem de `5.0"` Android POS / telefon kullanımına uygun kompakt arayüz içerir.
 
 ## Teknoloji
 
@@ -9,31 +10,44 @@ Restoran/kafe operasyonu için geliştirilmiş, VakıfBank kurumsal hissine sahi
 - Vite
 - Tailwind CSS
 - lucide-react
+- React Router
+- Capacitor (Android)
+- Supabase
 
 ## Öne Çıkan Özellikler
 
 - Login ekranı (`/login`) ve korumalı route yapısı
+- Çift arayüz desteği
+  - Masaüstü merchant paneli
+  - `5.0"` POS ve telefonlar için kompakt mobil sürüm
 - 12 masalı operasyon ekranı (`/masalar`)
   - Masa no arama ve durum filtreleri (Tümü/Boş/Dolu/Ödeme Bekliyor/Ödendi)
   - Masa birleştir
   - Masa taşı
   - Masa ayır (oran bazlı)
+  - Hızlı ödeme yönlendirmesi
+  - Masa bazlı servis aşaması rozeti
 - Masa operasyonları ekranı (`/masa-operasyonlari`)
   - Sol menüden erişim
   - Birleştir / Taşı / Ayır işlemlerinin tek panelden yönetimi
 - Ürün yönetimi ekranı (`/urun-yonetimi`)
   - Sol menüden erişim
   - Menüye yeni ürün ekleme
+  - Favori ürünleri yıldızlama
 - Adisyon yönetimi (`/adisyon/:tableId`)
   - Ürün arama
   - Kategori filtreleme
   - 1 Porsiyon / 1.5 Porsiyon ürün ekleme
+  - Favori ürünler
+  - Son seçilen ürünler
+  - Hızlı giden ürünler
   - Seçenekli ekleme: modifier + seat + not
   - Satır bazlı seat değişimi
   - Satır ikram + neden zorunluluğu
   - İşlemi geri alma
   - Satır logları (audit trail)
   - Adet artır/azalt
+  - Servis aşaması yönetimi: Bekliyor / Mutfakta / Hazır / Serviste
   - Anlık ara toplam/hizmet bedeli/genel toplam
 - Ödeme ekranı (`/odeme/:tableId`)
   - Nakit, kart, bölünmüş ödeme
@@ -53,6 +67,38 @@ Restoran/kafe operasyonu için geliştirilmiş, VakıfBank kurumsal hissine sahi
   - Başarısız işlem sayısı
   - Masa ve terminal dağılım görselleştirmesi
 - Ayarlar (`/ayarlar`) kurumsal placeholder ekranı
+  - Runtime Supabase bağlantı ayarı
+  - Cloud bağlantı testi
+  - Eksik tablo ve son sync durumu görünümü
+
+## Bu Projede Sonradan Eklenenler
+
+- Mobil POS odaklı kullanım iyileştirmeleri
+  - Daha büyük dokunma alanları
+  - Kutucuk tipinde kategori seçimi
+  - Ürünlerde hızlı ekleme akışı
+  - Alt sabit hızlı aksiyon alanları
+- Garson hız modu
+  - Favoriler
+  - Son seçilenler
+  - Hızlı gidenler
+  - Hızlı ödeme geçişleri
+- Masa operasyonları
+  - Birleştir / taşı / ayır akışı
+  - Servis aşamasının masa üstünde görünmesi
+- Finansal akışlar
+  - Kuver aç/kapat
+  - Garson bazlı ödeme alma takibi
+  - Bölünmüş ödeme
+  - Tam ve kısmi iade
+- Cloud backend hazırlığı
+  - Supabase ile ilişkisel tablo yapısı
+  - Cloud senkron durumu
+  - Local mod fallback
+- Android hazırlığı
+  - Capacitor entegrasyonu
+  - Canlı cihaz testi
+  - Debug APK üretimi
 
 ## Kurulum ve Çalıştırma
 
@@ -84,6 +130,9 @@ Kullanılan ana cloud tabloları:
 - `pos_order_item_modifiers`
 - `pos_order_audit_logs`
 - `pos_transactions`
+
+Legacy uyumluluk için:
+- `pos_snapshots`
 
 ### 1) Supabase tablo kurulumunu çalıştırın
 
@@ -131,6 +180,13 @@ npm run build
 ## Mobil Uygulama (Android)
 
 Proje Capacitor ile native Android uygulama olarak paketlenebilir.
+
+Mobil sürümde öne çıkanlar:
+- kompakt masa listesi
+- garson için hızlı adisyon akışı
+- favori ürünler ve hızlı seçim alanları
+- servis durumu takibi
+- telefon ve Android POS cihazlarda canlı test akışı
 
 İlk kurulum:
 
@@ -215,7 +271,11 @@ src/
 - `src/services/cloud/supabaseClient.ts`: Supabase bağlantı katmanı
 - `src/pages/PaymentPage.tsx`: POS mock akışı ve split payment mantığı
 - `src/pages/AdisyonPage.tsx`: Masa sipariş yönetimi
+- `src/pages/compact/AdisyonPageCompact.tsx`: 5.0" POS odaklı hızlı sipariş ekranı
+- `src/pages/compact/TablesPageCompact.tsx`: mobil masa operasyon ekranı
 - `src/pages/TransactionHistoryPage.tsx`: Filtreli işlem geçmişi
 - `src/components/tables/TableOperationsPanel.tsx`: Masa birleştir/taşı/ayır paneli
 - `src/components/tables/TableCard.tsx`: Referans alınan masa kartı düzeni
+- `src/components/menu/QuickPickSection.tsx`: favori / son seçilen / hızlı giden ürün alanları
+- `src/components/ui/ServiceStatusBadge.tsx`: servis aşaması rozeti
 - `src/components/layout/MainLayout.tsx`: Sol menü + üst header + sağ panel ana iskeleti
