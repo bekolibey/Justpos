@@ -1,0 +1,22 @@
+export const appRoutes = {
+  root: '/',
+  login: '/login',
+  tables: '/masalar',
+  adisyonPattern: '/adisyon/:tableId',
+  adisyon: (tableId: string) => `/adisyon/${tableId}`,
+  odemePattern: '/odeme/:tableId',
+  odeme: (tableId: string) => `/odeme/${tableId}`,
+  history: '/islem-gecmisi',
+  tableOperations: '/masa-operasyonlari',
+  productManagement: '/urun-yonetimi',
+  reports: '/raporlar',
+  settings: '/ayarlar',
+  mobile: {
+    root: '/mobil',
+    tables: '/mobil/masalar',
+    adisyonPattern: '/mobil/adisyon/:tableId',
+    adisyon: (tableId: string) => `/mobil/adisyon/${tableId}`,
+    odemePattern: '/mobil/odeme/:tableId',
+    odeme: (tableId: string) => `/mobil/odeme/${tableId}`,
+  },
+} as const;
